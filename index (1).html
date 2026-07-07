@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Happy Birthday, My Love! 💖</title>
+  <!-- Google Fonts for elegant typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 (free icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none; /* slight polish, prevents accidental text selection on drag */
+    }
+
+    body {
+      background: linear-gradient(145deg, #ffdde1 0%, #f9c9d4 100%);
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    /* main container */
+    .birthday-app {
+      max-width: 1300px;
+      width: 100%;
+      background: rgba(255, 245, 248, 0.85);
+      backdrop-filter: blur(3px);
+      border-radius: 60px 60px 60px 40px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(255,255,255,0.6);
+      overflow: hidden;
+      padding: 25px 20px 35px;
+      transition: all 0.3s ease;
+    }
+
+    /* hero header */
+    .hero {
+      text-align: center;
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 3.2rem;
+      background: linear-gradient(135deg, #c72a6f, #ff7e9e);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 15px rgba(255,105,180,0.3);
+      letter-spacing: 1px;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: #b13e6b;
+      font-weight: 500;
+      background: rgba(255,255,240,0.7);
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 40px;
+      backdrop-filter: blur(4px);
+    }
+
+    .birthday-icon {
+      font-size: 2.8rem;
+      filter: drop-shadow(2px 4px 12px rgba(0,0,0,0.2));
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0px); }
+    }
+
+    /* gallery grid for 10 photos */
+    .photo-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 20px;
+      margin: 30px 0 25px;
+      padding: 5px;
+    }
+
+    .photo-card {
+      background: white;
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      cursor: pointer;
+      transform: scale(1);
+      position: relative;
+      aspect-ratio: 1 / 1;
+    }
+
+    .photo-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 25px 35px rgba(199, 42, 111, 0.25);
+    }
+
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .photo-card:hover img {
+      transform: scale(1.05);
+    }
+
+    /* floating wish message overlay when click */
+    .wish-toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #ff3366ee;
+      backdrop-filter: blur(14px);
+      color: white;
+      padding: 14px 30px;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1.2rem;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      z-index: 1000;
+      transition: transform 0.4s ease;
+      pointer-events: none;
+      white-space: nowrap;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wish-toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* main birthday wish section */
+    .wish-section {
+      background: rgba(255, 230, 240, 0.8);
+      border-radius: 50px;
+      padding: 25px 20px;
+      margin: 15px 0 20px;
+      text-align: center;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255,255,200,0.7);
+    }
+
+    .birthday-message {
+      font-size: 1.45rem;
+      color: #9b2e4e;
+      font-weight: 500;
+      margin-bottom: 15px;
+    }
+
+    .special-message {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.9rem;
+      color: #c72a6f;
+      font-weight: bold;
+      background: linear-gradient(135deg, #ff99ac, #ff4d6d);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      flex-wrap: wrap;
+      margin: 25px 0 10px;
+    }
+
+    .btn {
+      background: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+      color: #c72a6f;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: #ff4d6d;
+      color: white;
+      box-shadow: 0 8px 18px #ff4d6d55;
+    }
+
+    .btn-primary:hover {
+      background: #e6395e;
+      transform: scale(1.02);
+      box-shadow: 0 10px 22px #ff4d6d88;
+    }
+
+    .btn-outline {
+      background: rgba(255,255,240,0.9);
+      border: 1px solid #ff99b4;
+    }
+
+    .btn-outline:hover {
+      background: #ffe3eb;
+      transform: translateY(-3px);
+    }
+
+    /* confetti canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* responsive */
+    @media (max-width: 680px) {
+      .birthday-app {
+        padding: 15px;
+      }
+      .photo-gallery {
+        gap: 12px;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      }
+      .hero h1 {
+        font-size: 2.3rem;
+      }
+      .birthday-message {
+        font-size: 1.1rem;
+      }
+      .special-message {
+        font-size: 1.5rem;
+      }
+      .wish-toast {
+        font-size: 0.9rem;
+        white-space: nowrap;
+        padding: 10px 20px;
+      }
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #b35d7a;
+      margin-top: 20px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+
+<div class="birthday-app">
+  <div class="hero">
+    <div class="birthday-icon">🎂🎈✨</div>
+    <h1>Happy Birthday, My Love!</h1>
+    <p>💕 To the girl who makes every moment magical 💕</p>
+  </div>
+
+  <!-- 10 PHOTOS GRID - Replace src with actual paths to your girlfriend's photos -->
+  <div class="photo-gallery" id="photoGallery">
+    <!-- Using placeholder images from unsplash? No we need user's photos. I'll provide an elegant demo using placeholder images BUT in final version user should replace with their local images
+         To give functional custom: I'll generate 10 image slots with sample URLs but editable. For the prompt, I embed comment that user must replace with actual images.
+         Actually the requirement: "i have the 10 photo of my girl friend" so I will make it super easy to replace:
+         I'll use local placeholder images + instruction via text, but to make demo impressive I will use dummy images but with custom label saying "REPLACE".
+         Better: Use free stock romantic images? But it's generic. To respect privacy, I embed the structure and a clear guide. 
+         Since it's a real app, I'll add a JS function to let user upload? But spec says generate functioning app with actual 10 photos, but I as AI can't access user's local images. 
+         So best practice: Provide a beautiful template where user can put their own 10 images named 1.jpg to 10.jpg in an "images" folder OR add array in js.
+         I'll embed a dataset example: and add a click handler that triggers birthday wishes. Also provide a method via "Upload Photos" button? But user has exactly 10 photos.
+         To be safe and usable: I create an array called 'photoPaths' in js that user can edit easily. For working out of box I'll use 10 placeholder romantic images from placeholder picsum (but these are random people) — but for girlfriend wish, user will replace.
+         I'll make the code extremely clear: show inline instructions and a note. Actually it's ethical to allow replacing easily. I'll generate the HTML with fallback cute icons? but better: I'll use unsplash/dummy but with replace comment.
+         The requirement: "i have the 10 photo of my girl friend" — so I build UI that expects photo slots, display number 1-10, and user modifies src.
+         To make demo interactive, I'll create image placeholders that show "Your Photo 1" text overlay? Not aesthetic.
+         I choose generic beautiful placeholder (Picsum nature) but with strong comment to replace. 
+         Alternatively, I add a file uploader to allow user to upload 10 photos on the fly? but spec asks for using HTML/CSS/JS and wish happy birthday. So for best user experience, I can integrate a simple "upload your photos" system? But then it's 10 photos static.
+         I will create a neat system: initially shows 10 cards with "🌸 Add Photo 🌸" but that requires interaction. More robust: Prefill sample girly style images (safe) but user can replace by editing the variable.
+         I deliver a clean solution: In JS there is array 'photosList' that contains 10 image URLs (I will use placeholder images of hearts & flowers style as demo) + clear inline instruction + comment.
+         Additionally, we add an "Edit Photos" guide? Not needed. I deliver fully functional app with romantic wishes, confetti, toast messages per photo, and a lovely layout.
+    -->
+  </div>
+
+  <div class="wish-section">
+    <div class="birthday-message">
+      🌟 Every photo reminds me of your beautiful smile 🌟
+    </div>
+    <div class="special-message" id="dynamicWish">
+      You are my greatest gift! ❤️
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-primary" id="surpriseBtn"><i class="fas fa-gift"></i> Send Birthday Love</button>
+      <button class="btn btn-outline" id="confettiBtn"><i class="fas fa-star"></i> Sparkle Confetti</button>
+    </div>
+  </div>
+  <footer>❤️ Click any photo for a personal birthday wish ❤️</footer>
+</div>
+
+<div id="toastMessage" class="wish-toast"><i class="fas fa-heart"></i> <span id="toastText"></span></div>
+<canvas id="confetti-canvas"></canvas>
+
+<script>
+  // ===================== CONFIGURATION: REPLACE THESE 10 URLs WITH YOUR GIRLFRIEND'S PHOTOS =====================
+  // Please replace the image paths below with your actual 10 girlfriend photos.
+  // You can put images in an "images" folder and name them as photo1.jpg ... photo10.jpg, or use any URLs.
+  // Example: "images/her1.jpg", "images/beautiful_day.jpg", etc.
+  // For demonstration I use beautiful floral & romantic stock placeholder images that represent 'love' but you must replace them.
+  // ===============================================================================================================
+  const girlfriendPhotos = [
+    "https://picsum.photos/id/20/400/400",    // replace with your photo 1 (coffee & nature)
+    "https://picsum.photos/id/64/400/400",    // replace with your photo 2 (couple vibe? actually river)
+    "https://picsum.photos/id/26/400/400",    // replace with your photo 3 (venice)
+    "https://picsum.photos/id/30/400/400",    // replace with your photo 4 (red tea cups)
+    "https://picsum.photos/id/96/400/400",    // replace with your photo 5 (mountain)
+    "https://picsum.photos/id/42/400/400",    // replace with your photo 6 (piano)
+    "https://picsum.photos/id/169/400/400",   // replace with your photo 7 (sunset)
+    "https://picsum.photos/id/155/400/400",   // replace with your photo 8 (cute animal? no but nice)
+    "https://picsum.photos/id/127/400/400",   // replace with your photo 9 (nature)
+    "https://picsum.photos/id/29/400/400"     // replace with your photo 10 (bridge)
+  ];
+  // IMPORTANT: Above are just placeholder demo images. Replace each string with the actual path to your girlfriend's photos.
+  // Example: "images/photo1.jpg", "images/photo2.jpg", ... etc.
+  // ===============================================================================================================
+
+  // Romantic birthday wishes collection for each photo click variation
+  const wishesList = [
+    "💖 You make my world brighter every single day!",
+    "✨ Your smile is my favorite masterpiece!",
+    "🌹 Every moment with you feels like a fairytale.",
+    "💕 You are the sweetest chapter of my life.",
+    "🌟 Loving you is the easiest and best thing I've done.",
+    "🌸 Your laugh is my favorite melody.",
+    "💗 You deserve all the happiness in the universe!",
+    "🎀 Being yours is the greatest blessing.",
+    "💞 You are my today and all of my tomorrows.",
+    "🍰 Happiest Birthday, my forever love!"
+  ];
+
+  // additional messages for random sparkle
+  const extraWishes = [
+    "🎂 Wishing you a day as gorgeous as you!",
+    "💖 May all your dreams take flight!",
+    "🌺 You are my sunshine on every cloudy day."
+  ];
+
+  // DOM elements
+  const galleryContainer = document.getElementById('photoGallery');
+  const toastMsgDiv = document.getElementById('toastMessage');
+  const toastTextSpan = document.getElementById('toastText');
+  const dynamicWishSpan = document.getElementById('dynamicWish');
+  let currentToastTimeout = null;
+
+  // Function to show floating sweet message
+  function showFloatingWish(message) {
+    if (currentToastTimeout) clearTimeout(currentToastTimeout);
+    toastTextSpan.innerHTML = message;
+    toastMsgDiv.classList.add('show');
+    currentToastTimeout = setTimeout(() => {
+      toastMsgDiv.classList.remove('show');
+    }, 2800);
+  }
+
+  // update main dynamic wish and also show toast (double love)
+  function sendPersonalizedWish(photoIndex, photoElement) {
+    const customWish = wishesList[photoIndex % wishesList.length];
+    const extraTouch = extraWishes[Math.floor(Math.random() * extraWishes.length)];
+    const finalMessage = `${customWish} ${extraTouch}`;
+    // Update main special message area
+    dynamicWishSpan.innerHTML = `✨ ${customWish.substring(0, 40)} ✨`;
+    // Show toast with more romantic flutter
+    showFloatingWish(`💌 ${finalMessage}`);
+    // optional: trigger mini confetti on click (gentle)
+    createMiniConfettiBurst(photoElement);
+  }
+
+  // mini burst effect around photo
+  function createMiniConfettiBurst(element) {
+    const rect = element.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    for (let i = 0; i < 25; i++) {
+      const conf = document.createElement('div');
+      conf.style.position = 'fixed';
+      conf.style.left = x + 'px';
+      conf.style.top = y + 'px';
+      conf.style.width = '8px';
+      conf.style.height = '8px';
+      conf.style.background = `hsl(${Math.random() * 360}, 100%, 65%)`;
+      conf.style.borderRadius = '50%';
+      conf.style.pointerEvents = 'none';
+      conf.style.zIndex = '10000';
+      conf.style.opacity = '1';
+      document.body.appendChild(conf);
+      const angle = Math.random() * Math.PI * 2;
+      const velocity = 3 + Math.random() * 6;
+      const vx = Math.cos(angle) * velocity;
+      const vy = Math.sin(angle) * velocity;
+      let posX = 0, posY = 0, opacity = 1;
+      const step = () => {
+        posX += vx;
+        posY += vy;
+        opacity -= 0.025;
+        conf.style.transform = `translate(${posX}px, ${posY}px)`;
+        conf.style.opacity = opacity;
+        if (opacity <= 0) {
+          conf.remove();
+        } else {
+          requestAnimationFrame(step);
+        }
+      };
+      requestAnimationFrame(step);
+      setTimeout(() => conf.remove(), 800);
+    }
+  }
+
+  // Build the gallery with 10 photos
+  function buildGallery() {
+    galleryContainer.innerHTML = '';
+    for (let i = 0; i < girlfriendPhotos.length; i++) {
+      const photoUrl = girlfriendPhotos[i];
+      const card = document.createElement('div');
+      card.className = 'photo-card';
+      const img = document.createElement('img');
+      // Handle potential broken image (if user not replaced placeholder yet)
+      img.src = photoUrl;
+      img.alt = `Beautiful memory ${i+1}`;
+      img.loading = 'lazy';
+      // If image fails, show a lovely placeholder text? but user will replace, but friendly fallback
+      img.onerror = () => {
+        img.src = 'https://via.placeholder.com/400/ffb6c1/ffffff?text=💖+Your+Photo+Here+💖';
+        img.style.objectFit = 'cover';
+      };
+      card.appendChild(img);
+      // Add click event to wish from that photo
+      card.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sendPersonalizedWish(i, card);
+        // also trigger a lovely floating heart effect
+        createHeartBubble(card);
+      });
+      galleryContainer.appendChild(card);
+    }
+  }
+
+  // heart bubble effect around photo
+  function createHeartBubble(card) {
+    const rect = card.getBoundingClientRect();
+    const heartSpan = document.createElement('i');
+    heartSpan.className = 'fas fa-heart';
+    heartSpan.style.position = 'fixed';
+    heartSpan.style.left = rect.left + rect.width/2 + 'px';
+    heartSpan.style.top = rect.top + rect.height/2 + 'px';
+    heartSpan.style.color = '#ff2e6e';
+    heartSpan.style.fontSize = '28px';
+    heartSpan.style.pointerEvents = 'none';
+    heartSpan.style.zIndex = '10001';
+    heartSpan.style.opacity = '1';
+    heartSpan.style.transform = 'translate(-50%, -50%) scale(0.5)';
+    heartSpan.style.transition = 'all 0.8s ease-out';
+    document.body.appendChild(heartSpan);
+    requestAnimationFrame(() => {
+      heartSpan.style.transform = 'translate(-50%, -50%) scale(1.5)';
+      heartSpan.style.opacity = '0';
+    });
+    setTimeout(() => heartSpan.remove(), 800);
+  }
+
+  // CONFETTI animation (full screen) using canvas
+  const canvas = document.getElementById('confetti-canvas');
+  let ctx = canvas.getContext('2d');
+  let animationId = null;
+  let particles = [];
+  let confettiActive = false;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+
+  class ConfettiParticle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height - canvas.height;
+      this.size = Math.random() * 7 + 3;
+      this.speedY = Math.random() * 5 + 3;
+      this.speedX = (Math.random() - 0.5) * 1.8;
+      this.color = `hsl(${Math.random() * 360}, 90%, 65%)`;
+      this.rotation = Math.random() * 360;
+      this.rotateSpeed = (Math.random() - 0.5) * 0.1;
+    }
+    update() {
+      this.y += this.speedY;
+      this.x += this.speedX;
+      this.rotation += this.rotateSpeed;
+      if (this.y > canvas.height + 30 || this.x < -50 || this.x > canvas.width + 50) {
+        this.y = -20;
+        this.x = Math.random() * canvas.width;
+        this.speedY = Math.random() * 5 + 3;
+      }
+    }
+    draw() {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation * Math.PI/180);
+      ctx.fillStyle = this.color;
+      ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+      ctx.restore();
+    }
+  }
+
+  function startConfetti(duration = 3500) {
+    if (confettiActive) return;
+    confettiActive = true;
+    particles = [];
+    for (let i = 0; i < 170; i++) {
+      particles.push(new ConfettiParticle());
+    }
+    function animateConfetti() {
+      if (!confettiActive) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let p of particles) {
+        p.update();
+        p.draw();
+      }
+      animationId = requestAnimationFrame(animateConfetti);
+    }
+    if (animationId) cancelAnimationFrame(animationId);
+    animateConfetti();
+    setTimeout(() => {
+      confettiActive = false;
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }, duration);
+  }
+
+  // surprise button: burst of classic messages and confetti
+  document.getElementById('surpriseBtn').addEventListener('click', () => {
+    const surpriseMessages = [
+      "🎉 HAPPY BIRTHDAY MY QUEEN! 🎉",
+      "💖 You're the most precious person in my life! 💖",
+      "💫 May our love story never end! 💫",
+      "🌟 For you, all the stars and my whole heart! 🌟",
+      "💕 Every day with you is a celebration!"
+    ];
+    const randomMsg = surpriseMessages[Math.floor(Math.random() * surpriseMessages.length)];
+    dynamicWishSpan.innerHTML = `✨ ${randomMsg} ✨`;
+    showFloatingWish(`🎁 ${randomMsg} 🎁`);
+    startConfetti(4000);
+    // also create extra hearts floating
+    for(let i=0;i<30;i++) {
+      setTimeout(() => {
+        const fakeDiv = document.createElement('div');
+        fakeDiv.style.position = 'fixed';
+        fakeDiv.style.left = Math.random() * window.innerWidth + 'px';
+        fakeDiv.style.bottom = '0px';
+        fakeDiv.style.fontSize = '22px';
+        fakeDiv.style.color = '#ff6b8b';
+        fakeDiv.innerHTML = '❤️';
+        fakeDiv.style.pointerEvents = 'none';
+        fakeDiv.style.zIndex = '10002';
+        fakeDiv.style.opacity = '1';
+        fakeDiv.style.transition = 'all 2s ease-out';
+        document.body.appendChild(fakeDiv);
+        let pos = 0;
+        const fly = setInterval(() => {
+          pos += 3;
+          fakeDiv.style.transform = `translateY(-${pos}px)`;
+          if (pos > 600) {
+            clearInterval(fly);
+            fakeDiv.remove();
+          }
+        }, 20);
+        setTimeout(() => fakeDiv.remove(), 2500);
+      }, i*70);
+    }
+  });
+
+  document.getElementById('confettiBtn').addEventListener('click', () => {
+    startConfetti(3000);
+    showFloatingWish("✨ Sparkles for the most beautiful girl! ✨");
+  });
+
+  // initial setup
+  resizeCanvas();
+  buildGallery();
+  // set an initial message
+  dynamicWishSpan.innerHTML = "🎀 Happy Birthday, sweetheart! 🎀";
+
+  // If user has actual 10 photos, just update the girlfriendPhotos array manually in the code or by adding a feature:
+  // For convenience, show guiding console info
+  console.log("💖 Happy Birthday App! Replace girlfriendPhotos array with your 10 girlfriend images 💖");
+</script>
+</body>
+</html>
